@@ -54,12 +54,12 @@ class Animal:
 
     def _set_poid_animal(self, p_poid_animal):
         """
-        Mutateur de l'attribut privée __poid
+        Mutateur de l'attribut privée __poid_animal
         """
         if p_poid_animal > 0.00:
-            self.__poid = p_poid_animal
+            self.__poid_animal = p_poid_animal
 
-    Poid = property(_get_poid_animal, _set_poid_animal)
+    PoidAnimal = property(_get_poid_animal, _set_poid_animal)
 
     ############################################
     #####  MÉTHODES SPÉCIALES OU MAGIQUES  #####
@@ -70,8 +70,10 @@ class Animal:
         Méthode spéciale d'affichage. À utiliser avec print(objet)
         :return: Chaine à afficher
         """
-        chaine = "\nNuméro de l'animal : " + self.__num_animal
+        chaine = " " * 60 + "\n" + "\n\n"
+        chaine += "\nNuméro de l'animal : " + self.__num_animal
         chaine += "\nPoid de l'animal : " + self.__poid_animal
         chaine += "\nEspèce de l'animal : " + self.Espece_animal
+        chaine += "\n" + self.Serpent.__str__() + "\n\n" + "*" * 60
 
         return chaine
