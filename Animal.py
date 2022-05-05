@@ -16,14 +16,14 @@ class Animal:
     ##################################
     #####  MÉTHODE CONSTRUCTEUR  #####
     ##################################
-    def __init__(self, p_num_animal="", p_poid=0.00, p_espece=""):
+    def __init__(self, p_num_animal="", p_poid_animal=0.00, p_espece_animal=""):
         """
         Méthode de type Constructeur avec paramètres et valeurs par défaut
         Définition des attributs d'un animal
         """
         self.__num_animal = p_num_animal
-        self.__poid = p_poid
-        self.Espece = p_espece
+        self.__poid_animal = p_poid_animal
+        self.Espece_animal = p_espece_animal
 
     ##################################################
     ####   Propriétés, accesseurs et mutateurs    ####
@@ -45,21 +45,21 @@ class Animal:
 
     NumAnimal = property(_get_num_animal, _set_num_animal)
 
-    # Propriété Poid
-    def _get_poid(self):
+    # Propriété PoidAnimal
+    def _get_poid_animal(self):
         """
-        Accesseur de l'attribut privée __poid
+        Accesseur de l'attribut privée __poid_animal
         """
-        return self.__poid
+        return self.__poid_animal
 
-    def _set_poid(self, p_poid):
+    def _set_poid_animal(self, p_poid_animal):
         """
         Mutateur de l'attribut privée __poid
         """
-        if p_poid > 0.00:
-            self.__poid = p_poid
+        if p_poid_animal > 0.00:
+            self.__poid = p_poid_animal
 
-    Poid = property(_get_poid, _set_poid)
+    Poid = property(_get_poid_animal, _set_poid_animal)
 
     ############################################
     #####  MÉTHODES SPÉCIALES OU MAGIQUES  #####
@@ -71,7 +71,7 @@ class Animal:
         :return: Chaine à afficher
         """
         chaine = "\nNuméro de l'animal : " + self.__num_animal
-        chaine += "\nPoid de l'animal : " + self.__poid
-        chaine += "\nEspèce de l'animal : " + self.Espece
+        chaine += "\nPoid de l'animal : " + self.__poid_animal
+        chaine += "\nEspèce de l'animal : " + self.Espece_animal
 
         return chaine
