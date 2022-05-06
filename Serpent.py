@@ -55,12 +55,11 @@ class Serpent (Animal):
                        1 s'il y a erreur d'écriture et 2 s'il y a erreur d'ouverture
 
         """
-        self.__dict__["Animaux"]=str(self.Serpent())+"\n"+str(self.Oiseau())+"\n"+str(self.Poisson())
+        self.__dict__["Serpents"]=str(Serpent())
 
         try:
-            with open(p_fichier , "w") as fichier:
+            with open(p_fichier, "w") as fichier:
                 try:
-                    #json.dump(self.__dict__, fichier)
                     json.dump(self.__dict__, fichier)
                     return 0
                 except:

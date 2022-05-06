@@ -17,7 +17,7 @@ class Oiseau (Animal):
     ##################################
     #####  MÉTHODE CONSTRUCTEUR  #####
     ##################################
-    def __init__(self, p_num_animal="", p_poid_animal=0.00, p_espece_animal="", p_couleur_plumes="", p_longueur_bec=0.00):
+    def __init__(self, p_num_animal="", p_poid_animal=0.00, p_espece_animal="", p_couleur_plumes="", p_longueur_bec=0):
         """
         Méthode de type Constructeur avec paramètres et valeurs par défaut
         Définition des attributs d'un oiseau

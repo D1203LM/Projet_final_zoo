@@ -6,9 +6,6 @@
 ###  No Groupe: 01
 ###  Description du fichier: Description de la classe parent Animal
 ####################################################################################
-from Serpent import *
-from Oiseau import *
-from Poisson import *
 from Enclos import *
 
 class Animal:
@@ -19,8 +16,7 @@ class Animal:
     ##################################
     #####  MÉTHODE CONSTRUCTEUR  #####
     ##################################
-    def __init__(self, p_num_animal="", p_poid_animal=0.00, p_espece_animal="", p_serpent=Serpent(), p_oiseau=Oiseau(),
-                 p_poisson=Poisson(), p_enclos=Enclos()):
+    def __init__(self, p_num_animal="", p_poid_animal=0.00, p_espece_animal="", p_enclos=Enclos()):
         """
         Méthode de type Constructeur avec paramètres et valeurs par défaut
         Définition des attributs d'un animal
@@ -28,9 +24,6 @@ class Animal:
         self.__num_animal = p_num_animal
         self.__poid_animal = p_poid_animal
         self.Espece_animal = p_espece_animal
-        self.Serpent = p_serpent
-        self.Oiseau = p_oiseau
-        self.Poisson = p_poisson
         self.Enclos = p_enclos
 
     ##################################################
@@ -82,9 +75,6 @@ class Animal:
         chaine += "\nNuméro de l'animal : " + self.__num_animal
         chaine += "\nPoid de l'animal : " + str(self.__poid_animal)
         chaine += "\nEspèce de l'animal : " + self.Espece_animal
-        chaine += "\n" + self.Serpent.__str__() + "\n\n" + "*" * 60
-        chaine += "\n" + self.Oiseau.__str__() + "\n\n" + "*" * 60
-        chaine += "\n" + self.Poisson.__str__() + "\n\n" + "*" * 60
         chaine += "\n" + self.Enclos.__str__() + "\n\n" + "*" * 60
 
         return chaine
