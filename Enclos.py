@@ -7,6 +7,8 @@
 ###  Description du fichier: Description de la classe Enclos
 ####################################################################################
 
+import json
+
 class Enclos:
     """
     Classe Enclos
@@ -58,3 +60,28 @@ class Enclos:
         chaine += "\nLieu de l'enclos : " + self.Lieu_enclos
 
         return chaine
+
+    ############################################
+    #####          Autres MÉTHODES         #####
+    ############################################
+
+    # inspiré de la méthode sérialiser étudiant
+    def serialiser(self, p_fichier):
+        """
+           Méthode permttant de sérialiser un objet de la classe Animal
+           ::param p_fichier : Le nom du fichier qui contiendra l'objet sérialisé
+           :: return : retourne 0 si le fichier est ouvert et les informations y sont écrites,
+                       1 s'il y a erreur d'écriture et 2 s'il y a erreur d'ouverture
+
+        """
+        self.__dict__["Enclos"]=str(Enclos())
+
+        try:
+            with open(p_fichier, "w") as fichier:
+                try:
+                    json.dump(self.__dict__, fichier)
+                    return 0
+                except:
+                    return 1
+        except:
+            return 2
