@@ -29,6 +29,8 @@ def cacher_labels_erreur(object):
 ###### DÉFINITIONS DE LA CLASSE Fenetre_dialogue_enclos ######
 ##############################################################
 
+# Créer une classe qui hérite de Qt et de notre ui.
+# Nom de ma classe (fenetrePrincipal)            # Nom de mon fichier ui
 class Fenetre_dialogue_enclos(QtWidgets.QDialog, dialogue_enclos.Ui_Dialog):
     def __init__(self, parent=None):
         """
@@ -44,6 +46,7 @@ class Fenetre_dialogue_enclos(QtWidgets.QDialog, dialogue_enclos.Ui_Dialog):
         # Cacher tous les labels d'erreur
         cacher_labels_erreur(self)
 
+    # Utiliser le décorateur ici pour empêcher que le code du gestionnaire d'événement du bouton ne s'éxecute deux fois
     @pyqtSlot()
     def on_pushButton_quitter_clicked(self):
         self.close()

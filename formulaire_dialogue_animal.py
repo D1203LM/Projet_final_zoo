@@ -15,6 +15,9 @@ from PyQt5.QtCore import pyqtSlot
 # Importer la boite de dialogue
 import dialogue_animal
 
+# importer la classe Animal
+from Animal import *
+
 #######################################
 ###### DÉFINITIONS DES FONCTIONS ######
 #######################################
@@ -35,6 +38,8 @@ def cacher_labels_erreur(object):
 ###### DÉFINITIONS DE LA CLASSE Fenetre_dialogue_animal ######
 ##############################################################
 
+# Créer une classe qui hérite de Qt et de notre ui.
+# Nom de ma classe (fenetrePrincipal)            # Nom de mon fichier ui
 class Fenetre_dialogue_animal(QtWidgets.QDialog, dialogue_animal.Ui_Dialog):
     def __init__(self, parent=None):
         """
@@ -50,6 +55,19 @@ class Fenetre_dialogue_animal(QtWidgets.QDialog, dialogue_animal.Ui_Dialog):
         # Cacher tous les labels d'erreur
         cacher_labels_erreur(self)
 
+    # Utiliser le décorateur ici pour empêcher que le code du gestionnaire d'événement du bouton ne s'éxecute deux fois
     @pyqtSlot()
     def on_pushButton_quitter_clicked(self):
         self.close()
+
+    # Bouton Ajouter
+    def on_pushButton_ajouter_clicked(self):
+        """
+        Gestionnaire d'évènement pour le bouton Ajouter
+        """
+        # Cacher les labels qui affichent les différentes erreurs
+        cacher_labels_erreur(self)
+        # Instancier un object Animal
+        nmal = Animal()
+        # Entrée de donnée pour les attributs de l'object Animal
+        nmal.NumAnimal = self.label_numero_nmal.text().capitalize()

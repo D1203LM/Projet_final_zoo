@@ -54,6 +54,7 @@ def verifier_animal_liste(p_num_animal):
 ########################################################
 
 # Créer une classe qui hérite de Qt et de notre ui.
+# Nom de ma classe (fenetrePrincipal)          # Nom de mon fichier ui
 class FenetrePrincipale(QtWidgets.QMainWindow, interface_graphique_zoo.Ui_MainWindow):
     """
     Nom de la classe : FenetrePrincipale
