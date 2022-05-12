@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1000</width>
-    <height>844</height>
+    <height>836</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -35,7 +35,7 @@
     <string>Numéro de l'animal</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="lineEdit_numero">
+  <widget class="QLineEdit" name="lineEdit_numero_nmal">
    <property name="geometry">
     <rect>
      <x>10</x>

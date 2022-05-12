@@ -13,12 +13,11 @@
 
 # Importer le module sys nécessaire à l'exécution.
 import sys
-# Importer Pour le model de la boite de dialogue animal
-from PyQt5.QtGui import QStandardItemModel, QStandardItem
 
 # importer les interfaces graphiques
 import interface_graphique_zoo
 from formulaire_dialogue_animal import *
+from formulaire_dialogue_enclos import *
 
 # importer les classes
 from Animal import *
@@ -48,13 +47,80 @@ def verifier_animal_liste(p_num_animal):
             return True
     return False
 
-def cacher_labels_erreur(object):
+
+
+########################################################
+###### DÉFINITIONS DE LA CLASSE FenetrePrincipale ######
+########################################################
+
+# Créer une classe qui hérite de Qt et de notre ui.
+class FenetrePrincipale(QtWidgets.QMainWindow, interface_graphique_zoo.Ui_MainWindow):
     """
-    Cacher les différents labels d'erreur
+    Nom de la classe : FenetrePrincipale
+    Héritages :
+    - QtWidgets.QMainWindow : Type d'interface créé par QtDesigner
+    - interface_graphique_zoo.Ui_MainWindow : Ma classe généré avec QtDesigner
     """
-    object.label_erreur_nmal_existe.setVisible(False)
-    object.label_erreur_nmal_inexistant.setVisible(False)
-    object.label_erreur_numero_nmal.setVisible(False)
-    object.label_erreur_poid_serpent.setVisible(False)
-    object.label_erreur_poid_oiseau.setVisible(False)
-    object.label_erreur_poid_poisson.setVisible(False)
+
+    def __init__(self, parent=None):
+        """
+        Constructeur de la classe
+        :param parent: QtWidgets.QMainWindow et interfcae_graphique_zoo.Ui_MainWindow
+        """
+        # Appeler le constructeur parent avec ma classe en paramètre
+        super(FenetrePrincipale, self).__init__(parent)
+        # Préparer l'interface utilisateur
+        self.setupUi(self)
+        # Donner un titre à la fenêtre principale
+        self.setWindowTitle("Gestion du zoo")
+
+    # Utiliser le décorateur ici pour empêcher que le code du gestionnaire d'événement du bouton ne s'éxecute deux fois
+    @pyqtSlot()
+    def on_pushButton_animal_clicked(self):
+        """
+        Gestionnaire d'évènement pour le bouton Animal
+        """
+        # Instancier une boite de dialogue Fenetre_dialogue_animal
+        dialog = Fenetre_dialogue_animal()
+        # Afficher la boite de dialogue
+        dialog.show()
+        reply = dialog.exec_()
+
+    @pyqtSlot()
+    def on_pushButton_enclos_clicked(self):
+        """
+        Gestionnaire d'évènement pour le bouton Enclos
+        """
+        # Instancier une boite de dialogue Fenetre_dialogue_enclos
+        dialog = Fenetre_dialogue_enclos()
+        # Afficher la boite de dialogue
+        dialog.show()
+        reply = dialog.exec_()
+
+    @pyqtSlot()
+    def on_pushButton_quitter_clicked(self):
+        self.close()
+
+
+#################################
+###### PROGRAMME PRINCIPAL ######
+#################################
+
+# Créer le main qui lance la fenêtre de Qt
+
+def main():
+    """
+    Méthode main : point d'entré du programme.
+    Exécution de l'applicatin avec l'interface graphique.
+    reply = Dialog.exec_()
+    """
+    # Instancier une application et une fenetre principale
+    app = QtWidgets.QApplication(sys.argv)
+    form = FenetrePrincipale()
+    # Afficher la fenêtre principale
+    form.show()
+    # Lancer l'application
+    app.exec()
+
+if __name__ == "__main__":
+    main()
