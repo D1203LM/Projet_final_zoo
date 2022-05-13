@@ -29,8 +29,6 @@ from Poisson import *
 ###  DÉCLARATIONS ET INITIALISATIONS - Portée globale  ###
 ##########################################################
 
-# Déclarer une liste d'animaux
-ls_Animaux = []
 
 #######################################
 ###### DÉFINITIONS DES FONCTIONS ######
