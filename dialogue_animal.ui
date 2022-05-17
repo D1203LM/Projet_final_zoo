@@ -700,7 +700,7 @@
     </font>
    </property>
    <property name="text">
-    <string>Espèce de l'oiseau</string>
+    <string>Espèce du poisson</string>
    </property>
   </widget>
   <widget class="QComboBox" name="comboBox_espece_poisson">
@@ -752,7 +752,7 @@
     </font>
    </property>
    <property name="text">
-    <string>Couleur de l'oiseau</string>
+    <string>Couleur du poisson</string>
    </property>
   </widget>
   <widget class="QComboBox" name="comboBox_couleur_poisson">
