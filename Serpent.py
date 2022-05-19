@@ -24,7 +24,7 @@ class Serpent (Animal):
         """
         Animal.__init__(self, p_num_animal, p_poid_animal, p_espece_animal)
         self.Couleur_ecailles = p_couleur_ecailles
-        self.Venmieux = p_venimeux
+        self.Venimeux = p_venimeux
 
     ############################################
     #####  MÉTHODES SPÉCIALES OU MAGIQUES  #####
@@ -38,7 +38,7 @@ class Serpent (Animal):
         chaine += "\nPoid du serpent : " + str(self.PoidAnimal)
         chaine += "\nEspèce du serpent : " + str(self.Espece_animal)
         chaine += "\nCouleur des écailles du serpent : " + str(self.Couleur_ecailles)
-        chaine += "\nVenimeux : " + str(self.Venmieux)
+        chaine += "\nVenimeux : " + str(self.Venimeux)
         chaine += "\n" + self.Enclos.__str__()
 
         return chaine

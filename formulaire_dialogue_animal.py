@@ -195,7 +195,7 @@ class Fenetre_dialogue_animal(QtWidgets.QDialog, dialogue_animal.Ui_Dialog):
                     mon_enclos = elt
             serp.Enclos = mon_enclos
             serp.Couleur_ecailles = self.comboBox_couleur_serpent.currentText()
-            serp.Venmieux = self.comboBox_venimeux.currentText()
+            serp.Venimeux = self.comboBox_venimeux.currentText()
             # Vérifier si le serpent existe ou pas dans la liste des animaux
             verifier_animal = verifier_animal_liste(serp.NumAnimal)
         # Si le numéro du serpent est valide mais existe déjà dans la liste des animaux (on ne peut donc pas l'ajouter)
@@ -305,6 +305,7 @@ class Fenetre_dialogue_animal(QtWidgets.QDialog, dialogue_animal.Ui_Dialog):
         """
         Gestionnaire d'évènement pour le bouton Modifier
         """
+        global choix_animal
         # Cacher les labels qui affichent les différentes erreurs
         cacher_labels_erreur(self)
         # Instancier un objet Serpent
@@ -320,7 +321,7 @@ class Fenetre_dialogue_animal(QtWidgets.QDialog, dialogue_animal.Ui_Dialog):
                     mon_enclos = elt
             serp.Enclos = mon_enclos
             serp.Couleur_ecailles = self.comboBox_couleur_serpent.currentText()
-            serp.Venmieux = self.comboBox_venimeux.currentText()
+            serp.Venimeux = self.comboBox_venimeux.currentText()
             # Vérifier si le serpent existe ou pas dans la liste des animaux
             verifier_animal = verifier_animal_liste(serp.NumAnimal)
             # Vérifier si le numéro de l'animal existe dans la liste des animaux
@@ -340,6 +341,9 @@ class Fenetre_dialogue_animal(QtWidgets.QDialog, dialogue_animal.Ui_Dialog):
                         # Apporter les modifications aux attributs
                         elt.PoidAnimal = self.lineEdit_poid_nmal.text()
                         elt.Enclos = self.comboBox_enclos.currentText()
+                        elt.Espece_animal = self.comboBox_espece_serpent.currentText()
+                        elt.Couleur_ecailles = self.comboBox_couleur_serpent.currentText()
+                        elt.Venimeux = self.comboBox_venimeux.currentText()
                 # Effacer le textBrowser
                 self.textBrowser_afficher_animaux.clear()
                 # Après modifications, réafficher tous les animaux de la liste dans le textBrowser
@@ -385,6 +389,8 @@ class Fenetre_dialogue_animal(QtWidgets.QDialog, dialogue_animal.Ui_Dialog):
                         # Apporter les modifications aux attributs
                         elt.PoidAnimal = self.lineEdit_poid_nmal.text()
                         elt.Enclos = self.comboBox_enclos.currentText()
+                        elt.Couleur_plumes = self.comboBox_couleur_oiseau.currentText()
+                        elt.Espece_animal = self.comboBox_espece_oiseau.currentText()
                         elt.LongueurBec = self.lineEdit_longueur_bec.text()
                 # Effacer le textBrowser
                 self.textBrowser_afficher_animaux.clear()
@@ -432,6 +438,8 @@ class Fenetre_dialogue_animal(QtWidgets.QDialog, dialogue_animal.Ui_Dialog):
                     # Apporter les modifications aux attributs
                     elt.PoidAnimal = self.lineEdit_poid_nmal.text()
                     elt.Enclos = self.comboBox_enclos.currentText()
+                    elt.Espece_animal = self.comboBox_couleur_poisson.currentText()
+                    elt.Couleur_ecailles = self.comboBox_couleur_poisson.currentText()
                     elt.LongueurPoisson = self.lineEdit_longueur_poisson.text()
             # Effacer le textBrowser
             self.textBrowser_afficher_animaux.clear()
@@ -449,6 +457,7 @@ class Fenetre_dialogue_animal(QtWidgets.QDialog, dialogue_animal.Ui_Dialog):
         """
         Gestionnaire d'évènement pour le bouton Supprimer
         """
+        global choix_animal
         # Cacher les labels qui affichent les différentes erreurs
         cacher_labels_erreur(self)
         # Instancier un objet Serpent
@@ -464,7 +473,7 @@ class Fenetre_dialogue_animal(QtWidgets.QDialog, dialogue_animal.Ui_Dialog):
                     mon_enclos = elt
             serp.Enclos = mon_enclos
             serp.Couleur_ecailles = self.comboBox_couleur_serpent.currentText()
-            serp.Venmieux = self.comboBox_venimeux.currentText()
+            serp.Venimeux = self.comboBox_venimeux.currentText()
             # Vérifier si le serpent existe ou pas dans la liste des animaux
             verifier_animal = verifier_animal_liste(serp.NumAnimal)
             # Si le numéro et le poid sont valides et l'animal existe dans la liste des animaux
