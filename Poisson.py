@@ -60,5 +60,6 @@ class Poisson (Animal):
         chaine += "\nEspèce du poisson : " + str(self.Espece_animal)
         chaine += "\nCouleur des écailles du poisson : " + str(self.Couleur_ecailles)
         chaine += "\nLongueur du poisson : " + str(self.LongueurPoisson)
+        chaine += "\n" + self.Enclos.__str__()
 
         return chaine

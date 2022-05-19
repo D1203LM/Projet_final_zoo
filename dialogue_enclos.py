@@ -140,7 +140,7 @@ class Ui_Dialog(object):
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
         self.label_numero_enclos.setText(_translate("Dialog", "Numéro de l\'enclos/aquarium"))
-        self.label_erreur_numero_enclos.setText(_translate("Dialog", "<html><head/><body><p><span style=\" color:#ff0000;\">Numéro de l\'enclos/aquarium invalide. Entrez ne lettre suivit de d\'un chiffre.</span></p></body></html>"))
+        self.label_erreur_numero_enclos.setText(_translate("Dialog", "<html><head/><body><p><span style=\" color:#ff0000;\">Numéro de l\'enclos/aquarium invalide. Entrez une lettre suivit de d\'un chiffre.</span></p></body></html>"))
         self.label_taille_enclos.setText(_translate("Dialog", "Taille de l\'enclos/aquarium"))
         self.comboBox_taille_enclos.setItemText(0, _translate("Dialog", "Petit"))
         self.comboBox_taille_enclos.setItemText(1, _translate("Dialog", "Moyen"))

@@ -59,5 +59,6 @@ class Oiseau (Animal):
         chaine += "\nEspèce de l'oiseau : " + str(self.Espece_animal)
         chaine += "\nCouleur des plumes de l'oiseau : " + str(self.Couleur_plumes)
         chaine += "\nLongueur du bec : " + str(self.LongueurBec)
+        chaine += "\n" + self.Enclos.__str__()
 
         return chaine

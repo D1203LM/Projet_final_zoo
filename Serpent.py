@@ -39,6 +39,7 @@ class Serpent (Animal):
         chaine += "\nEspèce du serpent : " + str(self.Espece_animal)
         chaine += "\nCouleur des écailles du serpent : " + str(self.Couleur_ecailles)
         chaine += "\nVenimeux : " + str(self.Venmieux)
+        chaine += "\n" + self.Enclos.__str__()
 
         return chaine
 

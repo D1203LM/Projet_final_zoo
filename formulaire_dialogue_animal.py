@@ -22,7 +22,10 @@ from Poisson import *
 
 # Importer la liste des animaux
 from liste_animaux import *
+from liste_enclos import *
 
+#variable
+choix_animal = ""
 #######################################
 ###### DÉFINITIONS DES FONCTIONS ######
 #######################################
@@ -134,6 +137,10 @@ def desactiver_widgets_poisson(object):
     object.comboBox_couleur_poisson.setEnabled(False)
     object.lineEdit_longueur_poisson.setEnabled(False)
 
+def charger_enclos(object):
+    for elt in ls_Enclos:
+        object.comboBox_enclos.addItem(elt.NumEnclos)
+
 ##############################################################
 ###### DÉFINITIONS DE LA CLASSE Fenetre_dialogue_animal ######
 ##############################################################
@@ -157,6 +164,9 @@ class Fenetre_dialogue_animal(QtWidgets.QDialog, dialogue_animal.Ui_Dialog):
         cacher_labels_erreur(self)
         # Désactiver les widgets des animaux
         desactiver_widgets_animaux(self)
+        # charger la comboBox_enclos à partir de la liste enclos
+        charger_enclos(self)
+
 
     # Utiliser le décorateur ici pour empêcher que le code du gestionnaire d'événement du bouton ne s'éxecute deux fois
     @pyqtSlot()
@@ -169,76 +179,125 @@ class Fenetre_dialogue_animal(QtWidgets.QDialog, dialogue_animal.Ui_Dialog):
         """
         Gestionnaire d'évènement pour le bouton Ajouter
         """
+        global choix_animal
         # Cacher les labels qui affichent les différentes erreurs
         cacher_labels_erreur(self)
-        # Instancier un object Animal
-        nmal = Animal()
-        # Entrée de donnée pour les attributs de l'object Animal
-        nmal.NumAnimal = self.lineEdit_numero_nmal.text().capitalize()
-        nmal.PoidAnimal = float(self.lineEdit_poid_nmal.text())
-        nmal.Espece_animal = self.comboBox_choix_nmal.currentText()
-        nmal.Enclos = self.comboBox_enclos.currentText()
-        # Booleen qui nous informe si le numéro de l'animal existe ou pas dans la liste des animaux
-        verifier_animal = verifier_animal_liste(nmal.NumAnimal)
         # Instancier un objet Serpent
-        serp = Serpent()
-        # Entrée de donnée pour les attributs de l'object Serpent
-        serp.NumAnimal = self.lineEdit_numero_nmal.text().capitalize()
-        serp.PoidAnimal = float(self.lineEdit_poid_nmal.text())
-        serp.Espece_animal = self.comboBox_espece_serpent.currentText()
-        serp.Enclos = self.comboBox_enclos.currentText()
-        serp.Couleur_ecailles = self.comboBox_couleur_serpent.currentText()
-        serp.Venmieux = self.comboBox_venimeux.currentText()
-        # Vérifier si le serpent existe ou pas dans la liste des animaux
-        verifier_animal = verifier_animal_liste(serp.NumAnimal)
+        if choix_animal == "Serpent":
+            serp = Serpent()
+            # Entrée de donnée pour les attributs de l'object Serpent
+            serp.NumAnimal = self.lineEdit_numero_nmal.text().capitalize()
+            serp.PoidAnimal = float(self.lineEdit_poid_nmal.text())
+            serp.Espece_animal = self.comboBox_espece_serpent.currentText()
+            mon_enclos = Enclos()
+            for elt in ls_Enclos:
+                if self.comboBox_enclos.currentText()== elt.NumEnclos :
+                    mon_enclos = elt
+            serp.Enclos = mon_enclos
+            serp.Couleur_ecailles = self.comboBox_couleur_serpent.currentText()
+            serp.Venmieux = self.comboBox_venimeux.currentText()
+            # Vérifier si le serpent existe ou pas dans la liste des animaux
+            verifier_animal = verifier_animal_liste(serp.NumAnimal)
+        # Si le numéro du serpent est valide mais existe déjà dans la liste des animaux (on ne peut donc pas l'ajouter)
+            if verifier_animal is True:
+                # Effacer le lineEdit du numéro animal et afficher le message d'erreur
+                self.lineEdit_numero_nmal.clear()
+                self.label_erreur_nmal_existe.setVisible(True)
+            # Si le numéro du serpent est invalide, effacer le lineEdit du numéro animal et affciher un message d'erreur
+            if serp.NumAnimal == "":
+                self.lineEdit_numero_nmal.clear()
+                self.label_erreur_numero_nmal.setVisible(True)
+            # Si le poid du serpent est invalide, afficher un message d'erreur
+            if serp.PoidAnimal == "":
+                self.lineEdit_poid_nmal.clear()
+                self.label_erreur_poid_nmal.setVisible(True)
+            # Si les informations entrées sont valides et l'animal n'esxiste pas dans la liste des animaux
+            if serp.NumAnimal != "" and serp.PoidAnimal != "" :
+                # Ajouter l'object instancié à la liste des animaux
+                ls_Animaux.append(serp)
+                # Ajouter les informations de l'animal au TextBrowser
+                self.textBrowser_afficher_animaux.append(serp.__str__())
+                # Réinitialiser les lineEdits
+                self.lineEdit_numero_nmal.clear()
+                self.lineEdit_poid_nmal.clear()
         # Instancier un object Oiseau
-        ois = Oiseau()
-        # Entrée de donnée pour les attributs de l'object Oiseau
-        ois.NumAnimal = self.lineEdit_numero_nmal.text().capitalize()
-        ois.PoidAnimal = float(self.lineEdit_poid_nmal.text())
-        ois.Espece_animal = self.comboBox_espece_oiseau.currentText()
-        ois.Enclos = self.comboBox_enclos.currentText()
-        ois.Couleur_plumes = self.comboBox_couleur_oiseau.currentText()
-        ois.LongueurBec = int(self.lineEdit_longueur_bec.text())
-        # Vérifier si l'oiseau existe ou pas dans la liste des animaux
-        verifier_animal = verifier_animal_liste(ois.NumAnimal)
+        if choix_animal == "Oiseau":
+            ois = Oiseau()
+            # Entrée de donnée pour les attributs de l'object Oiseau
+            ois.NumAnimal = self.lineEdit_numero_nmal.text().capitalize()
+            ois.PoidAnimal = float(self.lineEdit_poid_nmal.text())
+            ois.Espece_animal = self.comboBox_espece_oiseau.currentText()
+            mon_enclos = Enclos()
+            for elt in ls_Enclos:
+                if self.comboBox_enclos.currentText() == elt.NumEnclos:
+                    mon_enclos = elt
+            ois.Enclos = mon_enclos
+            ois.Couleur_plumes = self.comboBox_couleur_oiseau.currentText()
+            ois.LongueurBec = int(self.lineEdit_longueur_bec.text())
+            # Vérifier si l'oiseau existe ou pas dans la liste des animaux
+            verifier_animal = verifier_animal_liste(ois.NumAnimal)
+        # Si le numéro du serpent est valide mais existe déjà dans la liste des animaux (on ne peut donc pas l'ajouter)
+            if verifier_animal is True:
+                # Effacer le lineEdit du numéro animal et afficher le message d'erreur
+                self.lineEdit_numero_nmal.clear()
+                self.label_erreur_nmal_existe.setVisible(True)
+            # Si le numéro de l'oiseau est invalide, effacer le lineEdit du numéro animal et affciher un message d'erreur
+            if ois.NumAnimal == "":
+                self.lineEdit_numero_nmal.clear()
+                self.label_erreur_numero_nmal.setVisible(True)
+            # Si le poid de l'oiseau est invalide, afficher un message d'erreur
+            if ois.PoidAnimal == "":
+                self.lineEdit_poid_nmal.clear()
+                self.label_erreur_poid_nmal.setVisible(True)
+            # Si les informations entrées sont valides et l'animal n'esxiste pas dans la liste des animaux
+            if ois.NumAnimal != "" and ois.PoidAnimal != "" and ois.LongueurBec != "":
+                # Ajouter l'object instancié à la liste des animaux
+                ls_Animaux.append(ois)
+                # Ajouter les informations de l'animal au TextBrowser
+                self.textBrowser_afficher_animaux.append(ois.__str__())
+                # Réinitialiser les lineEdits
+                self.lineEdit_numero_nmal.clear()
+                self.lineEdit_poid_nmal.clear()
+                self.lineEdit_longueur_bec.clear()
         # Instancier un object Poisson
-        poiss = Poisson()
-        # Entrée de donnée pour les attributs de l'object Poisson
-        poiss.NumAnimal = self.label_numero_nmal.text().capitalize()
-        poiss.PoidAnimal = float(self.lineEdit_poid_nmal.text())
-        poiss.Espece_animal = self.comboBox_espece_poisson.currentText()
-        poiss.Enclos = self.comboBox_enclos.currentText()
-        poiss.Couleur_ecailles = self.comboBox_couleur_poisson.currentText()
-        poiss.LongueurPoisson = int(self.lineEdit_longueur_poisson.text())
-        # Vérifier si le poisson existe ou pas dans la liste des animaux
-        verifier_animal = verifier_animal_liste(poiss.NumAnimal)
-        # Si le numéro de l'animal est valide mais existe déjà dans la liste des animaux (on ne peut donc pas l'ajouter)
-        if verifier_animal is True:
-            # Effacer le lineEdit du numéro animal et afficher le message d'erreur
-            self.lineEdit_numero_nmal.clear()
-            self.label_erreur_nmal_existe.setVisible(True)
-        # Si le numéro de l'animal est invalide, effacer le lineEdit du numéro animal et affciher un message d'erreur
-        if nmal.NumAnimal == "":
-            self.lineEdit_numero_nmal.clear()
-            self.label_erreur_numero_nmal.setVisible(True)
-        # Si le poid de l'animal est invalide, afficher un message d'erreur
-        if nmal.PoidAnimal == "":
-            self.lineEdit_poid_nmal.clear()
-            self.label_erreur_poid_nmal.setVisible(True)
-        # Si les informations entrées sont valides et l'animal n'esxiste pas dans la liste des animaux
-        if nmal.NumAnimal != "" and nmal.PoidAnimal != "" and nmal.Enclos != "" and ois.LongueurBec != "" and \
-                poiss.LongueurPoisson != "" is False:
-            # Ajouter l'object instancié à la liste des animaux
-            nmal.serp.ois.poiss = nmal
-            ls_Animaux.append(nmal)
-            # Ajouter les informations de l'animal au TextBrowser
-            self.textBrowser_afficher_animaux.append(nmal.__str__())
-            # Réinitialiser les lineEdits
-            self.lineEdit_numero_nmal.clear()
-            self.lineEdit_poid_nmal.clear()
-            self.lineEdit_longueur_bec.clear()
-            self.lineEdit_longueur_poisson.clear()
+        if choix_animal == "Poisson":
+            poiss = Poisson()
+            # Entrée de donnée pour les attributs de l'object Poisson
+            poiss.NumAnimal = self.lineEdit_numero_nmal.text().capitalize()
+            poiss.PoidAnimal = float(self.lineEdit_poid_nmal.text())
+            poiss.Espece_animal = self.comboBox_espece_poisson.currentText()
+            mon_enclos = Enclos()
+            for elt in ls_Enclos:
+                if self.comboBox_enclos.currentText() == elt.NumEnclos:
+                    mon_enclos = elt
+            poiss.Enclos = mon_enclos
+            poiss.Couleur_ecailles = self.comboBox_couleur_poisson.currentText()
+            poiss.LongueurPoisson = int(self.lineEdit_longueur_poisson.text())
+            # Vérifier si le poisson existe ou pas dans la liste des animaux
+            verifier_animal = verifier_animal_liste(poiss.NumAnimal)
+        # Si le numéro du poisson est valide mais existe déjà dans la liste des animaux (on ne peut donc pas l'ajouter)
+            if verifier_animal is True:
+                # Effacer le lineEdit du numéro animal et afficher le message d'erreur
+                self.lineEdit_numero_nmal.clear()
+                self.label_erreur_nmal_existe.setVisible(True)
+            # Si le numéro du poisson est invalide, effacer le lineEdit du numéro animal et affciher un message d'erreur
+            if poiss.NumAnimal == "":
+                self.lineEdit_numero_nmal.clear()
+                self.label_erreur_numero_nmal.setVisible(True)
+            # Si le poid du poisson est invalide, afficher un message d'erreur
+            if poiss.PoidAnimal == "":
+                self.lineEdit_poid_nmal.clear()
+                self.label_erreur_poid_nmal.setVisible(True)
+            # Si les informations entrées sont valides et l'animal n'esxiste pas dans la liste des animaux
+            if poiss.NumAnimal != "" and poiss.PoidAnimal != "" and poiss.LongueurPoisson != "":
+                # Ajouter l'object instancié à la liste des animaux
+                ls_Animaux.append(poiss)
+                # Ajouter les informations de l'animal au TextBrowser
+                self.textBrowser_afficher_animaux.append(poiss.__str__())
+                # Réinitialiser les lineEdits
+                self.lineEdit_numero_nmal.clear()
+                self.lineEdit_poid_nmal.clear()
+                self.lineEdit_longueur_poisson.clear()
 
     @pyqtSlot()
     # Bouton Modifier
@@ -248,75 +307,131 @@ class Fenetre_dialogue_animal(QtWidgets.QDialog, dialogue_animal.Ui_Dialog):
         """
         # Cacher les labels qui affichent les différentes erreurs
         cacher_labels_erreur(self)
-        # Instancier un object Animal
-        nmal = Animal()
-        # Entrée de donnée pour les attributs de l'object Animal
-        nmal.NumAnimal = self.lineEdit_numero_nmal.text().capitalize()
-        nmal.PoidAnimal = float(self.lineEdit_poid_nmal.text())
-        nmal.Espece_animal = self.comboBox_choix_nmal.currentText()
-        nmal.Enclos = self.comboBox_enclos.currentText()
-        # Booleen qui nous informe si le numéro de l'animal existe ou pas dans la liste des animaux
-        verifier_animal = verifier_animal_liste(nmal.NumAnimal)
         # Instancier un objet Serpent
-        serp = Serpent()
-        # Entrée de donnée pour les attributs de l'object Serpent
-        serp.NumAnimal = self.lineEdit_numero_nmal.text().capitalize()
-        serp.PoidAnimal = float(self.lineEdit_poid_nmal.text())
-        serp.Espece_animal = self.comboBox_espece_serpent.currentText()
-        serp.Enclos = self.comboBox_enclos.currentText()
-        serp.Couleur_ecailles = self.comboBox_couleur_serpent.currentText()
-        serp.Venmieux = self.comboBox_venimeux.currentText()
-        # Vérifier si le serpent existe ou pas dans la liste des animaux
-        verifier_animal = verifier_animal_liste(serp.NumAnimal)
+        if choix_animal == "Serpent":
+            serp = Serpent()
+            # Entrée de donnée pour les attributs de l'object Serpent
+            serp.NumAnimal = self.lineEdit_numero_nmal.text().capitalize()
+            serp.PoidAnimal = float(self.lineEdit_poid_nmal.text())
+            serp.Espece_animal = self.comboBox_espece_serpent.currentText()
+            mon_enclos = Enclos()
+            for elt in ls_Enclos:
+                if self.comboBox_enclos.currentText() == elt.NumEnclos:
+                    mon_enclos = elt
+            serp.Enclos = mon_enclos
+            serp.Couleur_ecailles = self.comboBox_couleur_serpent.currentText()
+            serp.Venmieux = self.comboBox_venimeux.currentText()
+            # Vérifier si le serpent existe ou pas dans la liste des animaux
+            verifier_animal = verifier_animal_liste(serp.NumAnimal)
+            # Vérifier si le numéro de l'animal existe dans la liste des animaux
+            if verifier_animal is False and serp.NumAnimal != "":
+                # Effacer le lineEdit du numéro de l'animal et afficher le message d'erreur
+                self.lineEdit_numero_nmal.clear()
+                self.label_erreur_nmal_inexistant.setVisible(True)
+            # Si le poid du serpent est invalide, afficher un message d'erreur
+            if serp.PoidAnimal == "":
+                self.lineEdit_poid_nmal.clear()
+                self.label_erreur_poid_nmal.setVisible(True)
+            # Si les informations sont valides et l'animal existe dans la liste des animaux
+            if serp.NumAnimal != "" and serp.PoidAnimal != "" and verifier_animal is True:
+                for elt in ls_Animaux:
+                    # Chercher dans la liste des animaux un animal ayant le numéro d'animal entré
+                    if elt.NumAnimal == self.lineEdit_numero_nmal.text():
+                        # Apporter les modifications aux attributs
+                        elt.PoidAnimal = self.lineEdit_poid_nmal.text()
+                        elt.Enclos = self.comboBox_enclos.currentText()
+                # Effacer le textBrowser
+                self.textBrowser_afficher_animaux.clear()
+                # Après modifications, réafficher tous les animaux de la liste dans le textBrowser
+                for elt in ls_Animaux:
+                    self.textBrowser_afficher_animaux.append(elt.__str__())
+                # Réinitialiser les lineEdits du numéro de l'animal et du poid
+                self.lineEdit_numero_nmal.clear()
+                self.lineEdit_poid_nmal.clear()
         # Instancier un object Oiseau
-        ois = Oiseau()
-        # Entrée de donnée pour les attributs de l'object Oiseau
-        ois.NumAnimal = self.lineEdit_numero_nmal.text().capitalize()
-        ois.PoidAnimal = float(self.lineEdit_poid_nmal.text())
-        ois.Espece_animal = self.comboBox_espece_oiseau.currentText()
-        ois.Enclos = self.comboBox_enclos.currentText()
-        ois.Couleur_plumes = self.comboBox_couleur_oiseau.currentText()
-        ois.LongueurBec = int(self.lineEdit_longueur_bec.text())
-        # Vérifier si l'oiseau existe ou pas dans la liste des animaux
-        verifier_animal = verifier_animal_liste(ois.NumAnimal)
+        if choix_animal == "Oiseau":
+            ois = Oiseau()
+            # Entrée de donnée pour les attributs de l'object Oiseau
+            ois.NumAnimal = self.lineEdit_numero_nmal.text().capitalize()
+            ois.PoidAnimal = float(self.lineEdit_poid_nmal.text())
+            ois.Espece_animal = self.comboBox_espece_oiseau.currentText()
+            mon_enclos = Enclos()
+            for elt in ls_Enclos:
+                if self.comboBox_enclos.currentText() == elt.NumEnclos:
+                    mon_enclos = elt
+            ois.Enclos = mon_enclos
+            ois.Couleur_plumes = self.comboBox_couleur_oiseau.currentText()
+            ois.LongueurBec = int(self.lineEdit_longueur_bec.text())
+            # Vérifier si l'oiseau existe ou pas dans la liste des animaux
+            verifier_animal = verifier_animal_liste(ois.NumAnimal)
+            # Vérifier si le numéro de l'animal existe dans la liste des animaux
+            if verifier_animal is False and ois.NumAnimal != "":
+                # Effacer le lineEdit du numéro de l'animal et afficher le message d'erreur
+                self.lineEdit_numero_nmal.clear()
+                self.label_erreur_nmal_inexistant.setVisible(True)
+            # Si le poid de l'oiseau est invalide, afficher un message d'erreur
+            if ois.PoidAnimal == "":
+                self.lineEdit_poid_nmal.clear()
+                self.label_erreur_poid_nmal.setVisible(True)
+            # Si la longueur du bec d'un oiseau est invalide, afficher un message d'erreur
+            if ois.LongueurBec == "":
+                self.lineEdit_longueur_bec.clear()
+                self.label_erreur_longueur_bec.setVisible(True)
+            # Si les informations sont valides et l'animal existe dans la liste des animaux
+            if ois.NumAnimal != "" and ois.PoidAnimal != "" and ois.LongueurBec != "" and verifier_animal is True:
+                for elt in ls_Animaux:
+                    # Chercher dans la liste des animaux un animal ayant le numéro d'animal entré
+                    if elt.NumAnimal == self.lineEdit_numero_nmal.text():
+                        # Apporter les modifications aux attributs
+                        elt.PoidAnimal = self.lineEdit_poid_nmal.text()
+                        elt.Enclos = self.comboBox_enclos.currentText()
+                        elt.LongueurBec = self.lineEdit_longueur_bec.text()
+                # Effacer le textBrowser
+                self.textBrowser_afficher_animaux.clear()
+                # Après modifications, réafficher tous les animaux de la liste dans le textBrowser
+                for elt in ls_Animaux:
+                    self.textBrowser_afficher_animaux.append(elt.__str__())
+                # Réinitialiser les lineEdits du numéro de l'animal, du poid et du bec
+                self.lineEdit_numero_nmal.clear()
+                self.lineEdit_poid_nmal.clear()
+                self.lineEdit_longueur_bec.clear()
         # Instancier un object Poisson
-        poiss = Poisson()
-        # Entrée de donnée pour les attributs de l'object Poisson
-        poiss.NumAnimal = self.label_numero_nmal.text().capitalize()
-        poiss.PoidAnimal = float(self.lineEdit_poid_nmal.text())
-        poiss.Espece_animal = self.comboBox_espece_poisson.currentText()
-        poiss.Enclos = self.comboBox_enclos.currentText()
-        poiss.Couleur_ecailles = self.comboBox_couleur_poisson.currentText()
-        poiss.LongueurPoisson = int(self.lineEdit_longueur_poisson.text())
-        # Vérifier si le poisson existe ou pas dans la liste des animaux
-        verifier_animal = verifier_animal_liste(poiss.NumAnimal)
+        if choix_animal == "Poisson":
+            poiss = Poisson()
+            # Entrée de donnée pour les attributs de l'object Poisson
+            poiss.NumAnimal = self.label_numero_nmal.text().capitalize()
+            poiss.PoidAnimal = float(self.lineEdit_poid_nmal.text())
+            poiss.Espece_animal = self.comboBox_espece_poisson.currentText()
+            mon_enclos = Enclos()
+            for elt in ls_Enclos:
+                if self.comboBox_enclos.currentText() == elt.NumEnclos:
+                    mon_enclos = elt
+            poiss.Enclos = mon_enclos
+            poiss.Couleur_ecailles = self.comboBox_couleur_poisson.currentText()
+            poiss.LongueurPoisson = int(self.lineEdit_longueur_poisson.text())
+            # Vérifier si le poisson existe ou pas dans la liste des animaux
+            verifier_animal = verifier_animal_liste(poiss.NumAnimal)
         # Vérifier si le numéro de l'animal existe dans la liste des animaux
-        if verifier_animal is False and nmal.NumAnimal != "":
+        if verifier_animal is False and poiss.NumAnimal != "":
             # Effacer le lineEdit du numéro de l'animal et afficher le message d'erreur
             self.lineEdit_numero_nmal.clear()
             self.label_erreur_nmal_inexistant.setVisible(True)
-        # Si le poid de l'animal est invalide, afficher un message d'erreur
-        if nmal.PoidAnimal == "":
+        # Si le poid du poisson est invalide, afficher un message d'erreur
+        if poiss.PoidAnimal == "":
             self.lineEdit_poid_nmal.clear()
             self.label_erreur_poid_nmal.setVisible(True)
-        # Si la longueur du bec d'un oiseau est invalide, afficher un message d'erreur
-        if ois.LongueurBec == "":
-            self.lineEdit_longueur_bec.clear()
-            self.label_erreur_longueur_bec.setVisible(True)
         # Si la longueur du poisson est invalide, afficher un message d'erreur
         if poiss.LongueurPoisson == "":
             self.lineEdit_longueur_poisson.clear()
             self.label_erreur_longueur_poisson.setVisible(True)
         # Si les informations sont valides et l'animal existe dans la liste des animaux
-        if nmal.NumAnimal != "" and nmal.PoidAnimal != "" and nmal.Enclos != "" and ois.LongueurBec != "" and \
-                poiss.LongueurPoisson != "" and verifier_animal is True:
+        if poiss.NumAnimal != "" and poiss.PoidAnimal != "" and poiss.LongueurPoisson != "" and verifier_animal is True:
             for elt in ls_Animaux:
                 # Chercher dans la liste des animaux un animal ayant le numéro d'animal entré
                 if elt.NumAnimal == self.lineEdit_numero_nmal.text():
                     # Apporter les modifications aux attributs
                     elt.PoidAnimal = self.lineEdit_poid_nmal.text()
                     elt.Enclos = self.comboBox_enclos.currentText()
-                    elt.LongueurBec = self.lineEdit_longueur_bec.text()
                     elt.LongueurPoisson = self.lineEdit_longueur_poisson.text()
             # Effacer le textBrowser
             self.textBrowser_afficher_animaux.clear()
@@ -326,7 +441,6 @@ class Fenetre_dialogue_animal(QtWidgets.QDialog, dialogue_animal.Ui_Dialog):
             # Réinitialiser les lineEdits du numéro de l'animal, du poid, du bec de l'oiseau et longueur du poisson
             self.lineEdit_numero_nmal.clear()
             self.lineEdit_poid_nmal.clear()
-            self.lineEdit_longueur_bec.clear()
             self.lineEdit_longueur_poisson.clear()
 
     @pyqtSlot()
@@ -337,94 +451,174 @@ class Fenetre_dialogue_animal(QtWidgets.QDialog, dialogue_animal.Ui_Dialog):
         """
         # Cacher les labels qui affichent les différentes erreurs
         cacher_labels_erreur(self)
-        # Instancier un object Animal
-        nmal = Animal()
-        # Entrée de donnée pour les attributs de l'object Animal
-        nmal.NumAnimal = self.lineEdit_numero_nmal.text().capitalize()
-        nmal.PoidAnimal = float(self.lineEdit_poid_nmal.text())
-        nmal.Espece_animal = self.comboBox_choix_nmal.currentText()
-        nmal.Enclos = self.comboBox_enclos.currentText()
-        # Booleen qui nous informe si le numéro de l'animal existe ou pas dans la liste des animaux
-        verifier_animal = verifier_animal_liste(nmal.NumAnimal)
         # Instancier un objet Serpent
-        serp = Serpent()
-        # Entrée de donnée pour les attributs de l'object Serpent
-        serp.NumAnimal = self.lineEdit_numero_nmal.text().capitalize()
-        serp.PoidAnimal = float(self.lineEdit_poid_nmal.text())
-        serp.Espece_animal = self.comboBox_espece_serpent.currentText()
-        serp.Enclos = self.comboBox_enclos.currentText()
-        serp.Couleur_ecailles = self.comboBox_couleur_serpent.currentText()
-        serp.Venmieux = self.comboBox_venimeux.currentText()
-        # Vérifier si le serpent existe ou pas dans la liste des animaux
-        verifier_animal = verifier_animal_liste(serp.NumAnimal)
-        # Instancier un object Oiseau
-        ois = Oiseau()
-        # Entrée de donnée pour les attributs de l'object Oiseau
-        ois.NumAnimal = self.lineEdit_numero_nmal.text().capitalize()
-        ois.PoidAnimal = float(self.lineEdit_poid_nmal.text())
-        ois.Espece_animal = self.comboBox_espece_oiseau.currentText()
-        ois.Enclos = self.comboBox_enclos.currentText()
-        ois.Couleur_plumes = self.comboBox_couleur_oiseau.currentText()
-        ois.LongueurBec = int(self.lineEdit_longueur_bec.text())
-        # Vérifier si l'oiseau existe ou pas dans la liste des animaux
-        verifier_animal = verifier_animal_liste(ois.NumAnimal)
-        # Instancier un object Poisson
-        poiss = Poisson()
-        # Entrée de donnée pour les attributs de l'object Poisson
-        poiss.NumAnimal = self.label_numero_nmal.text().capitalize()
-        poiss.PoidAnimal = float(self.lineEdit_poid_nmal.text())
-        poiss.Espece_animal = self.comboBox_espece_poisson.currentText()
-        poiss.Enclos = self.comboBox_enclos.currentText()
-        poiss.Couleur_ecailles = self.comboBox_couleur_poisson.currentText()
-        poiss.LongueurPoisson = int(self.lineEdit_longueur_poisson.text())
-        # Vérifier si le poisson existe ou pas dans la liste des animaux
-        verifier_animal = verifier_animal_liste(poiss.NumAnimal)
-        # Si le numéro et le poid sont valides et l'animal existe dans la liste des animaux
-        if nmal.NumAnimal != "" and nmal.PoidAnimal != "" and verifier_animal is True:
-            trouve = False
-            for elt in ls_Animaux:
-                # Chercher dans la liste des animaux un animal ayant les informations entrées
-                if elt.NumAnimal == self.lineEdit_numero_nmal.text() and elt.PoidAnimal==self.lineEdit_poid_nmal.text():
-                    # Supprimer l'animal de la liste des animaux
-                    trouve = True
-                    ls_Animaux.remove(elt)
-                    break
-            # Si l'animal n'existe pas dans la liste, afficher un message d'erreur
-            if not trouve:
-                self.label_erreur_nmal_inexistant.setVisible(True)
-            else:
-                # Réafficher dans le textBrowser la nouvelle liste qui ne contient pas l'animal supprimé
-                self.textBrowser_afficher_animaux.clear()
+        if choix_animal == "Serpent":
+            serp = Serpent()
+            # Entrée de donnée pour les attributs de l'object Serpent
+            serp.NumAnimal = self.lineEdit_numero_nmal.text().capitalize()
+            serp.PoidAnimal = float(self.lineEdit_poid_nmal.text())
+            serp.Espece_animal = self.comboBox_espece_serpent.currentText()
+            mon_enclos = Enclos()
+            for elt in ls_Enclos:
+                if self.comboBox_enclos.currentText() == elt.NumEnclos:
+                    mon_enclos = elt
+            serp.Enclos = mon_enclos
+            serp.Couleur_ecailles = self.comboBox_couleur_serpent.currentText()
+            serp.Venmieux = self.comboBox_venimeux.currentText()
+            # Vérifier si le serpent existe ou pas dans la liste des animaux
+            verifier_animal = verifier_animal_liste(serp.NumAnimal)
+            # Si le numéro et le poid sont valides et l'animal existe dans la liste des animaux
+            if serp.NumAnimal != "" and serp.PoidAnimal != "" and verifier_animal is True:
+                trouve = False
                 for elt in ls_Animaux:
-                    self.textBrowser_afficher_animaux.append(elt.__str__())
-                # Réinitialiser les lineEdits
+                    # Chercher dans la liste des animaux un animal ayant les informations entrées
+                    if elt.NumAnimal == self.lineEdit_numero_nmal.text() and elt.PoidAnimal == \
+                            self.lineEdit_poid_nmal.text():
+                        # Supprimer l'animal de la liste des animaux
+                        trouve = True
+                        ls_Animaux.remove(elt)
+                        break
+                # Si l'animal n'existe pas dans la liste, afficher un message d'erreur
+                if not trouve:
+                    self.label_erreur_nmal_inexistant.setVisible(True)
+                else:
+                    # Réafficher dans le textBrowser la nouvelle liste qui ne contient pas l'animal supprimé
+                    self.textBrowser_afficher_animaux.clear()
+                    for elt in ls_Animaux:
+                        self.textBrowser_afficher_animaux.append(elt.__str__())
+                    # Réinitialiser les lineEdits
+                    self.lineEdit_numero_nmal.clear()
+                    self.lineEdit_poid_nmal.clear()
+                    # Si le numéro de l'animal n'existe pas dans la liste des animaux, afficher un message d'erreur
+            if verifier_animal is False and serp.NumAnimal != "":
+                # Effacer le lineEdit numero animal et afficher le message d'erreur
                 self.lineEdit_numero_nmal.clear()
+                self.label_erreur_nmal_inexistant.setVisible(True)
+            # Si le numéro de l'animal est invalide, afficher un message d'erreur
+            if serp.NumAnimal == "":
+                self.lineEdit_numero_nmal.clear()
+                self.label_numero_nmal.setVisible(True)
+            # Si le poid du serpent est invalide, afficher un message d'erreur
+            if serp.PoidAnimal == "":
                 self.lineEdit_poid_nmal.clear()
-                # Si le numéro de l'animal n'existe pas dans la liste des animaux, afficher un message d'erreur
-        if verifier_animal is False and nmal.NumAnimal != "":
-            # Effacer le lineEdit numero animal et afficher le message d'erreur
-            self.lineEdit_numero_nmal.clear()
-            self.label_erreur_nmal_inexistant.setVisible(True)
-        # Si le numéro de l'animal est invalide, afficher un message d'erreur
-        if nmal.NumAnimal == "":
-            self.lineEdit_numero_nmal.clear()
-            self.label_numero_nmal.setVisible(True)
-        # Si le poid de l'animal est invalide, afficher un message d'erreur
-        if nmal.PoidAnimal == "":
-            self.lineEdit_poid_nmal.clear()
-            self.label_erreur_poid_nmal.setVisible(True)
+                self.label_erreur_poid_nmal.setVisible(True)
+        # Instancier un object Oiseau
+        if choix_animal == "Oiseau":
+            ois = Oiseau()
+            # Entrée de donnée pour les attributs de l'object Oiseau
+            ois.NumAnimal = self.lineEdit_numero_nmal.text().capitalize()
+            ois.PoidAnimal = float(self.lineEdit_poid_nmal.text())
+            ois.Espece_animal = self.comboBox_espece_oiseau.currentText()
+            mon_enclos = Enclos()
+            for elt in ls_Enclos:
+                if self.comboBox_enclos.currentText() == elt.NumEnclos:
+                    mon_enclos = elt
+            ois.Enclos = mon_enclos
+            ois.Couleur_plumes = self.comboBox_couleur_oiseau.currentText()
+            ois.LongueurBec = int(self.lineEdit_longueur_bec.text())
+            # Vérifier si l'oiseau existe ou pas dans la liste des animaux
+            verifier_animal = verifier_animal_liste(ois.NumAnimal)
+            # Si le numéro et le poid sont valides et l'animal existe dans la liste des animaux
+            if ois.NumAnimal != "" and ois.PoidAnimal != "" and verifier_animal is True:
+                trouve = False
+                for elt in ls_Animaux:
+                    # Chercher dans la liste des animaux un animal ayant les informations entrées
+                    if elt.NumAnimal == self.lineEdit_numero_nmal.text() and elt.PoidAnimal == \
+                            self.lineEdit_poid_nmal.text():
+                        # Supprimer l'animal de la liste des animaux
+                        trouve = True
+                        ls_Animaux.remove(elt)
+                        break
+                # Si l'animal n'existe pas dans la liste, afficher un message d'erreur
+                if not trouve:
+                    self.label_erreur_nmal_inexistant.setVisible(True)
+                else:
+                    # Réafficher dans le textBrowser la nouvelle liste qui ne contient pas l'animal supprimé
+                    self.textBrowser_afficher_animaux.clear()
+                    for elt in ls_Animaux:
+                        self.textBrowser_afficher_animaux.append(elt.__str__())
+                    # Réinitialiser les lineEdits
+                    self.lineEdit_numero_nmal.clear()
+                    self.lineEdit_poid_nmal.clear()
+                    # Si le numéro de l'animal n'existe pas dans la liste des animaux, afficher un message d'erreur
+            if verifier_animal is False and ois.NumAnimal != "":
+                # Effacer le lineEdit numero animal et afficher le message d'erreur
+                self.lineEdit_numero_nmal.clear()
+                self.label_erreur_nmal_inexistant.setVisible(True)
+            # Si le numéro de l'animal est invalide, afficher un message d'erreur
+            if ois.NumAnimal == "":
+                self.lineEdit_numero_nmal.clear()
+                self.label_numero_nmal.setVisible(True)
+            # Si le poid de l'oiseau est invalide, afficher un message d'erreur
+            if ois.PoidAnimal == "":
+                self.lineEdit_poid_nmal.clear()
+                self.label_erreur_poid_nmal.setVisible(True)
+        # Instancier un object Poisson
+        if choix_animal == "Poisson":
+            poiss = Poisson()
+            # Entrée de donnée pour les attributs de l'object Poisson
+            poiss.NumAnimal = self.label_numero_nmal.text().capitalize()
+            poiss.PoidAnimal = float(self.lineEdit_poid_nmal.text())
+            poiss.Espece_animal = self.comboBox_espece_poisson.currentText()
+            mon_enclos = Enclos()
+            for elt in ls_Enclos:
+                if self.comboBox_enclos.currentText() == elt.NumEnclos:
+                    mon_enclos = elt
+            poiss.Enclos = mon_enclos
+            poiss.Couleur_ecailles = self.comboBox_couleur_poisson.currentText()
+            poiss.LongueurPoisson = int(self.lineEdit_longueur_poisson.text())
+            # Vérifier si le poisson existe ou pas dans la liste des animaux
+            verifier_animal = verifier_animal_liste(poiss.NumAnimal)
+            # Si le numéro et le poid sont valides et l'animal existe dans la liste des animaux
+            if poiss.NumAnimal != "" and poiss.PoidAnimal != "" and verifier_animal is True:
+                trouve = False
+                for elt in ls_Animaux:
+                    # Chercher dans la liste des animaux un animal ayant les informations entrées
+                    if elt.NumAnimal == self.lineEdit_numero_nmal.text() and elt.PoidAnimal==self.lineEdit_poid_nmal.text():
+                        # Supprimer l'animal de la liste des animaux
+                        trouve = True
+                        ls_Animaux.remove(elt)
+                        break
+                # Si l'animal n'existe pas dans la liste, afficher un message d'erreur
+                if not trouve:
+                    self.label_erreur_nmal_inexistant.setVisible(True)
+                else:
+                    # Réafficher dans le textBrowser la nouvelle liste qui ne contient pas l'animal supprimé
+                    self.textBrowser_afficher_animaux.clear()
+                    for elt in ls_Animaux:
+                        self.textBrowser_afficher_animaux.append(elt.__str__())
+                    # Réinitialiser les lineEdits
+                    self.lineEdit_numero_nmal.clear()
+                    self.lineEdit_poid_nmal.clear()
+                    # Si le numéro de l'animal n'existe pas dans la liste des animaux, afficher un message d'erreur
+            if verifier_animal is False and poiss.NumAnimal != "":
+                # Effacer le lineEdit numero animal et afficher le message d'erreur
+                self.lineEdit_numero_nmal.clear()
+                self.label_erreur_nmal_inexistant.setVisible(True)
+            # Si le numéro de l'animal est invalide, afficher un message d'erreur
+            if poiss.NumAnimal == "":
+                self.lineEdit_numero_nmal.clear()
+                self.label_numero_nmal.setVisible(True)
+            # Si le poid du poisson est invalide, afficher un message d'erreur
+            if poiss.PoidAnimal == "":
+                self.lineEdit_poid_nmal.clear()
+                self.label_erreur_poid_nmal.setVisible(True)
 
     @pyqtSlot()
     def on_pushButton_choix_nmal_clicked(self):
+        global choix_animal
         if self.comboBox_choix_nmal.currentText() == "Serpent":
             activer_widgets_serpent(self)
             desactiver_widgets_oiseau(self)
             desactiver_widgets_poisson(self)
+            choix_animal = "Serpent"
         elif self.comboBox_choix_nmal.currentText() == "Oiseau":
             activer_widgets_oiseau(self)
             desactiver_widgets_serpent(self)
             desactiver_widgets_poisson(self)
+            choix_animal = "Oiseau"
         else:
             activer_widgets_poisson(self)
             desactiver_widgets_serpent(self)
             desactiver_widgets_oiseau(self)
+            choix_animal = "Poisson"
