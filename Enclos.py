@@ -9,6 +9,9 @@
 
 import json
 
+# Importer la liste des animaux
+from liste_animaux import *
+
 class Enclos:
     """
     Classe Enclos
@@ -17,7 +20,7 @@ class Enclos:
     ##################################
     #####  MÉTHODE CONSTRUCTEUR  #####
     ##################################
-    def __init__(self, p_num_enclos="", p_taille_enclos="", p_lieu_enclos=""):
+    def __init__(self, p_num_enclos="", p_taille_enclos="", p_lieu_enclos="", p_list_animaux=ls_Animaux):
         """
         Méthode de type Constructeur avec paramètres et valeurs par défaut
         Définition des attributs d'un enclos
@@ -25,6 +28,7 @@ class Enclos:
         self.__num_enclos = p_num_enclos
         self.Taille_enclos = p_taille_enclos
         self.Lieu_enclos = p_lieu_enclos
+        self.List_animaux = p_list_animaux
 
     ##################################################
     ####   Propriétés, accesseurs et mutateurs    ####
@@ -68,7 +72,7 @@ class Enclos:
     # inspiré de la méthode sérialiser étudiant
     def serialiser(self, p_fichier):
         """
-           Méthode permttant de sérialiser un objet de la classe Animal
+           Méthode permttant de sérialiser un objet de la classe Enclos
            ::param p_fichier : Le nom du fichier qui contiendra l'objet sérialisé
            :: return : retourne 0 si le fichier est ouvert et les informations y sont écrites,
                        1 s'il y a erreur d'écriture et 2 s'il y a erreur d'ouverture
@@ -85,3 +89,11 @@ class Enclos:
                     return 1
         except:
             return 2
+
+    def deserialiser(self, p_fichier):
+        """
+        Méthode permettant de désérialiser un objet de la classe Enclos
+        ::param p_fichier : Le nom du fichier qui contiendra l'objet sérialisé
+        """
+        with open(p_fichier , "r") as fichier :
+            self.__dict__ = json.load(fichier)

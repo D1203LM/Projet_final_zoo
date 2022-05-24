@@ -50,11 +50,10 @@ class Serpent (Animal):
     # inspiré de la méthode sérialiser étudiant
     def serialiser(self, p_fichier):
         """
-           Méthode permttant de sérialiser un objet de la classe Animal
-           ::param p_fichier : Le nom du fichier qui contiendra l'objet sérialisé
-           :: return : retourne 0 si le fichier est ouvert et les informations y sont écrites,
-                       1 s'il y a erreur d'écriture et 2 s'il y a erreur d'ouverture
-
+        Méthode permettant de sérialiser un objet de la classe Serpent
+        ::param p_fichier : Le nom du fichier qui contiendra l'objet sérialisé
+        :: return : retourne 0 si le fichier est ouvert et les informations y sont écrites,
+                    1 s'il y a erreur d'écriture et 2 s'il y a erreur d'ouverture
         """
         self.__dict__["Serpents"]=str(Serpent())
 
@@ -67,3 +66,11 @@ class Serpent (Animal):
                     return 1
         except:
             return 2
+
+    def deserialiser(self, p_fichier):
+        """
+        Méthode permettant de désérialiser un objet de la classe Serpent
+        ::param p_fichier : Le nom du fichier qui contiendra l'objet sérialisé
+        """
+        with open(p_fichier , "r") as fichier :
+            self.__dict__ = json.load(fichier)

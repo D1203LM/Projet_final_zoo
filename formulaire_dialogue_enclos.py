@@ -195,3 +195,47 @@ class Fenetre_dialogue_enclos(QtWidgets.QDialog, dialogue_enclos.Ui_Dialog):
         if enc.NumEnclos == "":
             self.lineEdit_numero_enclos.clear()
             self.label_erreur_numero_enclos.setVisible(True)
+
+    @pyqtSlot()
+    def on_pushButton_serialiser_clicked(self):
+        """
+        Gestionnaire d'évènement pour le bouton sérialiser
+        """
+        # Instancier un object Enclos
+        enc = Enclos()
+        # Entrée de donnée pour les attributs de l'object Enclos
+        enc.NumEnclos = self.lineEdit_numero_enclos.text().capitalize()
+        enc.Taille_enclos = self.comboBox_taille_enclos.currentText()
+        enc.Lieu_enclos = self.comboBox_lieu_enclos.currentText()
+        # Si les informations entrés sont valides
+        if enc.NumEnclos != "":
+            # Sérialiser cet l'object
+            result = enc.serialiser("." + "/" + "Sérialiser_enclos" + "/" + enc.NumEnclos + ".json")
+            # Si la sérialisation a fonctionné
+            if result == 0:
+                # Réinitialiser le lineEdit
+                self.lineEdit_numero_enclos.clear()
+            # Si le numéro de l'enclos est invalide, afficher un message d'erreur
+            if enc.NumEnclos == "":
+                self.lineEdit_numero_enclos.clear()
+                self.label_erreur_numero_enclos.setVisible(True)
+
+    @pyqtSlot()
+    def on_pushButton_deserialiser_clicked(self):
+        """
+        Gestionnaire d'évènement pour le bouton désérialiser
+        """
+        # Instancier un object Enclos
+        enc = Enclos()
+        # Entrée de donnée pour les attributs de l'object Enclos
+        enc.NumEnclos = self.lineEdit_numero_enclos.text().capitalize()
+        enc.Taille_enclos = self.comboBox_taille_enclos.currentText()
+        enc.Lieu_enclos = self.comboBox_lieu_enclos.currentText()
+        # Si les informations entrés sont valides
+        if enc.NumEnclos != "":
+            # Désérialiser cet l'object
+            result = enc.deserialiser()
+            # Si le numéro de l'enclos est invalide, afficher un message d'erreur
+            if enc.NumEnclos == "":
+                self.lineEdit_numero_enclos.clear()
+                self.label_erreur_numero_enclos.setVisible(True)

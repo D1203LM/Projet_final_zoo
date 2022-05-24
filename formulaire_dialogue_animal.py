@@ -194,6 +194,9 @@ class Fenetre_dialogue_animal(QtWidgets.QDialog, dialogue_animal.Ui_Dialog):
                 if self.comboBox_enclos.currentText()== elt.NumEnclos :
                     mon_enclos = elt
             serp.Enclos = mon_enclos
+            for elt in ls_Enclos:
+                if elt.NumEnclos == serp.Enclos.NumEnclos:
+                    elt.ls_animaux.append(serp)
             serp.Couleur_ecailles = self.comboBox_couleur_serpent.currentText()
             serp.Venimeux = self.comboBox_venimeux.currentText()
             # Vérifier si le serpent existe ou pas dans la liste des animaux
@@ -232,6 +235,9 @@ class Fenetre_dialogue_animal(QtWidgets.QDialog, dialogue_animal.Ui_Dialog):
                 if self.comboBox_enclos.currentText() == elt.NumEnclos:
                     mon_enclos = elt
             ois.Enclos = mon_enclos
+            for elt in ls_Enclos:
+                if elt.NumEnclos == ois.Enclos.NumEnclos:
+                    elt.ls_animaux.append(ois)
             ois.Couleur_plumes = self.comboBox_couleur_oiseau.currentText()
             ois.LongueurBec = int(self.lineEdit_longueur_bec.text())
             # Vérifier si l'oiseau existe ou pas dans la liste des animaux
@@ -271,6 +277,9 @@ class Fenetre_dialogue_animal(QtWidgets.QDialog, dialogue_animal.Ui_Dialog):
                 if self.comboBox_enclos.currentText() == elt.NumEnclos:
                     mon_enclos = elt
             poiss.Enclos = mon_enclos
+            for elt in ls_Enclos:
+                if elt.NumEnclos == poiss.Enclos.NumEnclos:
+                    elt.ls_animaux.append(poiss)
             poiss.Couleur_ecailles = self.comboBox_couleur_poisson.currentText()
             poiss.LongueurPoisson = int(self.lineEdit_longueur_poisson.text())
             # Vérifier si le poisson existe ou pas dans la liste des animaux
@@ -631,3 +640,75 @@ class Fenetre_dialogue_animal(QtWidgets.QDialog, dialogue_animal.Ui_Dialog):
             desactiver_widgets_serpent(self)
             desactiver_widgets_oiseau(self)
             choix_animal = "Poisson"
+
+    @pyqtSlot()
+    def on_pushButton_serialiser_clicked(self):
+        """
+        Gestionnaire d'évènement pour le bouton sérialiser
+        """
+        global choix_animal
+        # Instancier un objet Serpent
+        if choix_animal == "Serpent":
+            serp = Serpent()
+            # Entrée de donnée pour les attributs de l'object Serpent
+            serp.NumAnimal = self.lineEdit_numero_nmal.text().capitalize()
+            serp.PoidAnimal = float(self.lineEdit_poid_nmal.text())
+            serp.Espece_animal = self.comboBox_espece_serpent.currentText()
+            mon_enclos = Enclos()
+            for elt in ls_Enclos:
+                if self.comboBox_enclos.currentText() == elt.NumEnclos:
+                    mon_enclos = elt
+            serp.Enclos = mon_enclos
+            serp.Couleur_ecailles = self.comboBox_couleur_serpent.currentText()
+            serp.Venimeux = self.comboBox_venimeux.currentText()
+            # Si les informations entrées sont valides
+            if serp.NumAnimal != "" and serp.PoidAnimal != "":
+                # Sérialiser cet l'object
+                result = serp.serialiser("." + "/" + "Sérialiser_serpents" + "/" + serp.NumAnimal + "_" + serp.Espece_animal + \
+                                         ".json")
+                # Si la sérialisation à fonctionné
+                if result == 0:
+                    # Réinitialiser les lineEdit
+                    self.lineEdit_numero_nmal.clear()
+                    self.lineEdit_poid_nmal.clear()
+            # Si le numéro est invalide, afficher un message d'erreur
+            if serp.NumAnimal == "":
+                self.lineEdit_numero_nmal.clear()
+                self.label_erreur_numero_nmal.setVisible(True)
+            # Si le poid de l'animal est invalide, afficher un message d'erreur
+            if serp.PoidAnimal == "":
+                self.lineEdit_poid_nmal.clear()
+                self.label_erreur_poid_nmal.setVisible(True)
+
+    @pyqtSlot()
+    def on_pushButton_deserialiser_clicked(self):
+        """
+        Gestionnaire d'évènement pour le bouton désérialiser
+        """
+        global choix_animal
+        # Instancier un objet Serpent
+        if choix_animal == "Serpent":
+            serp = Serpent()
+            # Entrée de donnée pour les attributs de l'object Serpent
+            serp.NumAnimal = self.lineEdit_numero_nmal.text().capitalize()
+            serp.PoidAnimal = float(self.lineEdit_poid_nmal.text())
+            serp.Espece_animal = self.comboBox_espece_serpent.currentText()
+            mon_enclos = Enclos()
+            for elt in ls_Enclos:
+                if self.comboBox_enclos.currentText() == elt.NumEnclos:
+                    mon_enclos = elt
+            serp.Enclos = mon_enclos
+            serp.Couleur_ecailles = self.comboBox_couleur_serpent.currentText()
+            serp.Venimeux = self.comboBox_venimeux.currentText()
+            # Si les informations entrées sont valides
+            if serp.NumAnimal != "" and serp.PoidAnimal != "":
+                # Désérialiser l'object
+                result = serp.deserialiser()
+            # Si le numéro est invalide, afficher un message d'erreur
+            if serp.NumAnimal == "":
+                self.lineEdit_numero_nmal.clear()
+                self.label_erreur_numero_nmal.setVisible(True)
+            # Si le poid de l'animal est invalide, afficher un message d'erreur
+            if serp.PoidAnimal == "":
+                self.lineEdit_poid_nmal.clear()
+                self.label_erreur_poid_nmal.setVisible(True)
